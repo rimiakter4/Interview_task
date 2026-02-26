@@ -4,7 +4,9 @@ import { useNavigate } from "react-router";
 import { loginUser } from "../Api/Api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ArrowUpRight, Mail, Lock, LogIn } from "lucide-react"; 
-import toast from "react-hot-toast";
+import { toast, ToastContainer } from "react-toastify";
+
+
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -29,10 +31,10 @@ export default function LoginPage() {
       const data = await loginUser(email, password);
       localStorage.setItem("token", data.token);
       
-      // ২. সফল হলে টোস্ট মেসেজ দেখান
+      
       toast.success("Successfully logged in!");
 
-      // একটু সময় নিয়ে ন্যাভিগেট করুন যাতে ইউজার টোস্টটি দেখতে পায়
+   
       setTimeout(() => {
         navigate("/dashboard");
       }, 1500);
@@ -48,8 +50,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#05050a] relative overflow-hidden font-sans">
       
-      {/* ৩. Toaster কম্পোনেন্টটি এখানে রাখুন */}
-      <Toaster position="top-center" reverseOrder={false} />
+      
+      <ToastContainer position="top-center" reverseOrder={false} />
 
       {/* Background Glows */}
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px]"></div>
