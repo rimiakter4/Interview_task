@@ -1,8 +1,10 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { loginUser } from "../Api/Api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { ArrowUpRight, ShieldCheck, Mail, Lock, LogIn } from "lucide-react"; 
+import { ArrowUpRight, Mail, Lock, LogIn } from "lucide-react"; 
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -16,10 +18,9 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email) return setError("Email is required");
-    if (!password) return setError("Password is required");
-    if (password.length < 6)
-      return setError("Password must be at least 6 characters");
+    if (!email) return toast.error("Email is required");
+    if (!password) return toast.error("Password is required");
+    if (password.length < 6) return toast.error("Password must be at least 6 characters");
 
     setError("");
     setLoading(true);
@@ -27,8 +28,17 @@ export default function LoginPage() {
     try {
       const data = await loginUser(email, password);
       localStorage.setItem("token", data.token);
-      navigate("/dashboard");
+      
+      // ২. সফল হলে টোস্ট মেসেজ দেখান
+      toast.success("Successfully logged in!");
+
+      // একটু সময় নিয়ে ন্যাভিগেট করুন যাতে ইউজার টোস্টটি দেখতে পায়
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1500);
+
     } catch (err) {
+      toast.error("Invalid email or password");
       setError("Invalid email or password");
     } finally {
       setLoading(false);
@@ -38,6 +48,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#05050a] relative overflow-hidden font-sans">
       
+      {/* ৩. Toaster কম্পোনেন্টটি এখানে রাখুন */}
+      <Toaster position="top-center" reverseOrder={false} />
+
       {/* Background Glows */}
       <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px]"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]"></div>
@@ -57,14 +70,8 @@ export default function LoginPage() {
           <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
 
           <h2 className="text-2xl font-bold text-white mb-8 text-center">
-             Login Account
+              Login Account
           </h2>
-
-          {error && (
-            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-sm mb-6 text-center font-medium">
-              {error}
-            </div>
-          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
@@ -103,7 +110,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Login Button with Icon */}
             <button
               disabled={loading}
               className="w-full relative mt-4 overflow-hidden group"
