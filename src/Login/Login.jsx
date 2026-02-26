@@ -1,9 +1,8 @@
-
-   import { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
-// import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUser } from "../Api/Api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { ArrowUpRight, ShieldCheck, Mail, Lock, LogIn } from "lucide-react"; 
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -17,7 +16,6 @@ export default function LoginPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Frontend validation
     if (!email) return setError("Email is required");
     if (!password) return setError("Password is required");
     if (password.length < 6)
@@ -38,54 +36,96 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 px-4">
-      <div className="w-full max-w-md bg-white/70 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border">
-        <h2 className="text-3xl font-bold text-center text-indigo-700 mb-6">
-          Login Account
-        </h2>
+    <div className="min-h-screen flex items-center justify-center bg-[#05050a] relative overflow-hidden font-sans">
+      
+      {/* Background Glows */}
+      <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[120px]"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px]"></div>
 
-        {error && (
-          <p className="text-red-500 text-center mb-4 font-medium">{error}</p>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          {/* Email */}
-          <label className="font-semibold text-gray-700">Email</label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 mt-1 mb-4 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none"
-          />
-
-          {/* Password */}
-          <label className="font-semibold text-gray-700">Password</label>
-          <div className="relative mt-1 mb-4">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 pr-10 rounded-lg border focus:ring-2 focus:ring-indigo-500 outline-none"
-            />
-
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </span>
+      <div className="w-full max-w-md z-10 px-4">
+        {/* Logo Section */}
+        <div className="flex flex-col items-center mb-10 text-center">
+          <div className="w-16 h-16 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center text-white shadow-[0_0_30px_rgba(79,70,229,0.3)] mb-4 transition-transform hover:scale-110">
+            <ArrowUpRight size={35} strokeWidth={3} />
           </div>
+          <h1 className="text-4xl font-black text-white tracking-tighter italic">Fluxalytica</h1>
+          <p className="text-slate-500 text-xs mt-1 tracking-[0.3em] uppercase font-bold">Secure Dashboard Portal</p>
+        </div>
 
-          {/* Button */}
-          <button
-            disabled={loading}
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+        {/* Login Card */}
+        <div className="bg-[#080812] border border-white/5 p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
+
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">
+             Login Account
+          </h2>
+
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-xl text-sm mb-6 text-center font-medium">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email Field */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-400 ml-1">Email</label>
+              <div className="relative group">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full bg-white/[0.02] border border-white/5 p-3.5 pl-12 rounded-2xl text-white outline-none focus:bg-white/[0.04] focus:border-indigo-500/30 transition-all placeholder:text-slate-700"
+                />
+              </div>
+            </div>
+
+            {/* Password Field */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-400 ml-1">Password</label>
+              <div className="relative group">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-white/[0.02] border border-white/5 p-3.5 pl-12 pr-12 rounded-2xl text-white outline-none focus:bg-white/[0.04] focus:border-indigo-500/30 transition-all placeholder:text-slate-700"
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-slate-600 hover:text-white transition-colors"
+                >
+                  {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
+                </span>
+              </div>
+            </div>
+
+            {/* Login Button with Icon */}
+            <button
+              disabled={loading}
+              className="w-full relative mt-4 overflow-hidden group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 to-purple-600 transition-all duration-300 group-hover:scale-105 group-active:scale-95 rounded-2xl"></div>
+              <div className="relative py-4 text-white font-bold tracking-wide flex items-center justify-center gap-2">
+                {loading ? (
+                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                ) : (
+                  <>
+                    Login 
+                    <LogIn size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </div>
+            </button>
+          </form>
+
+          <p className="text-center mt-8 text-slate-600 text-[10px] font-bold uppercase tracking-widest">
+            Fluxalytica Protection System
+          </p>
+        </div>
       </div>
     </div>
   );
